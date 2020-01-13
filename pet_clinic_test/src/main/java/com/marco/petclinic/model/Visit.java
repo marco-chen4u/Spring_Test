@@ -9,6 +9,10 @@ public class Visit extends BaseEntity{
     private Pet pet;
 
     // constructors
+    public Visit(){
+
+    }
+
     public Visit(Long id) {
         super(id);
     }
