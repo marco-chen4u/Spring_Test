@@ -37,7 +37,7 @@ class SpecialityServiceImplTest {
 
         // then
         assertThat(foundSpeciality).isNotNull();
-        then(specialityRepository).should().findById(anyLong());
+        then(specialityRepository).should(timeout(100)).findById(anyLong());
         then(specialityRepository).shouldHaveNoMoreInteractions();
     }
 
@@ -50,7 +50,7 @@ class SpecialityServiceImplTest {
         service.deleteById(1l);
 
         // then
-        then(specialityRepository).should(times(2)).deleteById(1l);
+        then(specialityRepository).should(timeout(100).times(2)).deleteById(1l);
     }
 
     @Test
