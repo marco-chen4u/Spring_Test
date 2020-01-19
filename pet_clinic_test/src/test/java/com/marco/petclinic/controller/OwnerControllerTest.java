@@ -37,6 +37,9 @@ class OwnerControllerTest {
     @Mock
     BindingResult bindingResult;
 
+    @Mock
+    Model model;
+
     @Captor
     ArgumentCaptor<String> stringArgumentCaptor;
 
@@ -132,7 +135,7 @@ class OwnerControllerTest {
         Owner owner = new Owner(id, "Marco", "FindMe");
 
         // when
-        String viewName = controller.processFindForm(owner, bindingResult, Mockito.mock(Model.class));
+        String viewName = controller.processFindForm(owner, bindingResult, model);
 
         // then
         String expectValue = "%FindMe%";
