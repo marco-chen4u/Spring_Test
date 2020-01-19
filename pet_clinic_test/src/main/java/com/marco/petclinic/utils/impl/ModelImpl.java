@@ -18,7 +18,7 @@ public class ModelImpl implements Model {
     }
 
     @Override
-    public void addAtrribute(Object object) {
+    public void addAttribute(Object object) {
         this.attributeMap.put(object.toString(), object);
     }
 

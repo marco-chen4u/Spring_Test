@@ -15,7 +15,7 @@ public class ModelMapImpl implements Model {
     }
 
     @Override
-    public void addAtrribute(Object o) {
+    public void addAttribute(Object o) {
         // do nothing
     }
 }

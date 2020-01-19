@@ -4,5 +4,5 @@ public interface Model {
 
     void addAttribute(String key, Object o);
 
-    void addAtrribute(Object o);
+    void addAttribute(Object o);
 }

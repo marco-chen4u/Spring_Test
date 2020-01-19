@@ -1,6 +1,7 @@
 package com.marco.petclinic.service.jpa;
 
 import com.marco.petclinic.dao.VisitRepository;
+import com.marco.petclinic.model.Speciality;
 import com.marco.petclinic.model.Visit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,10 +14,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -92,5 +93,23 @@ class VisitServiceImplTest {
 
         // then
         then(visitRepository).should().deleteById(anyLong());
+    }
+
+    @Test
+    void testThrowExceptionWhenDelete() {
+        willThrow(new RuntimeException("delete-exception")).given(visitRepository).delete(any());
+
+        assertThrows(RuntimeException.class, ()->visitRepository.delete(new Visit()));
+
+        then(visitRepository).should().delete(any());
+    }
+
+    @Test
+    void testFindByIDThrows() {
+        given(visitRepository.findById(1l)).willThrow(new RuntimeException("findById exception"));
+
+        assertThrows(RuntimeException.class, ()->service.findById(1l));
+
+        then(visitRepository).should().findById(1l);
     }
 }

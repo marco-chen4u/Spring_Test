@@ -69,4 +69,24 @@ class SpecialityServiceImplTest {
         // then
         then(specialityRepository).should().delete(any(Speciality.class));// argument matcher
     }
+
+    @Test
+    void testSaveLamdaMatch() {
+        // given
+        final String description = "speciality description";
+        Speciality speciality = new Speciality();
+        speciality.setDescription(description);
+
+        Speciality saveSpeciality = new Speciality();
+        saveSpeciality.setId(1l);
+
+        // need mock to only return on match string
+        given(specialityRepository.save(argThat(arg -> arg.getDescription().equals(description)))).willReturn(saveSpeciality);
+
+        // when
+        Speciality returnSpeciality = service.save(speciality);
+
+        // then
+        assertThat(returnSpeciality.getId()).isEqualTo(1l);
+    }
 }
