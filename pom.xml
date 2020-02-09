@@ -7,6 +7,7 @@
     <modules>
         <module>hello_world_test</module>
         <module>pet_clinic_test</module>
+        <module>brewery</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
