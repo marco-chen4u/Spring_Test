@@ -1,55 +1,44 @@
 package com.marco.brewery.web.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.marco.brewery.services.BeerService;
 import com.marco.brewery.utils.Utils;
 import com.marco.brewery.web.model.BeerDto;
 import com.marco.brewery.web.model.BeerPagedList;
 import com.marco.brewery.web.model.BeerStyleEnum;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.reset;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(BeerController.class)
 class BeerControllerTest {
 
-    @Mock
+    @MockBean
     BeerService beerService;
 
-    @InjectMocks
-    BeerController beerController;
-
+    @Autowired
     MockMvc mockMvc;
 
     BeerDto validBeer;
@@ -68,8 +57,13 @@ class BeerControllerTest {
                 .build();
         System.out.println("validBeer.id = " + validBeer.getId());
 
-        mockMvc = MockMvcBuilders.standaloneSetup(beerController).build();
     }
+
+    @AfterEach
+    void tearDown() {
+        reset(beerService);
+    }
+
 
     @Test
     void testGetBeer() throws Exception {
@@ -142,17 +136,4 @@ class BeerControllerTest {
                     .andExpect(jsonPath("$.content[0].id", is(validBeer.getId().toString())));
         }
     }
-
-    // custom message converter
-//    public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-//        objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, true);
-//        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-//
-//        objectMapper.registerModule(new JavaTimeModule());
-//
-//        return new MappingJackson2HttpMessageConverter(objectMapper);
-//    }
 }
